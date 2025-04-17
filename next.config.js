@@ -16,7 +16,6 @@ const APP_URL =
 const nextConfig = {
   // Add static export support
   output: 'export',
-  
   env: {
     APP_URL,
   },
@@ -46,8 +45,8 @@ const nextConfig = {
       destination: "/api/widget/skip/handler",
     },
   ],
-  // Simplified transpilePackages to avoid syntax issues
   transpilePackages: [],
+
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
