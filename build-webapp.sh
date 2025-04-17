@@ -9,7 +9,7 @@ if [[ -d "$DEST_DIR" ]]; then
 fi
 
 npm install || exit 1
-npm install next@14.1.0 next-seo@6.4.0 || exit 1
+npm install next@14.1.0 || exit 1
 
 npm run build
 
