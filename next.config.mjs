@@ -65,6 +65,9 @@ const nextConfig = {
         hostname: "**",
       },
     ],
+  },
+  webpack: (config) => {
+    return config;
   }
 };
 
