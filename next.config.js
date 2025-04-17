@@ -11,6 +11,8 @@ const APP_URL =
  * @see https://nextjs.org/docs/pages/api-reference/next-config-js
  */
 let nextConfig = {
+  // Add static export support
+  output: 'export',
   env: {
     APP_URL,
   },
