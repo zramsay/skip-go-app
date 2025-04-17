@@ -1,22 +1,11 @@
-/// <reference path="./env.d.ts" />
-/// <reference path="./vercel.d.ts" />
-
-import webpack from 'webpack';
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
-const APP_URL =
-  process.env.APP_URL ||
-  (process.env.VERCEL && `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`) ||
-  `${process.env.PROTOCOL || "http"}://${process.env.HOST || "localhost"}:${process.env.PORT || 3000}`;
-
 /**
  * @type {import('next').NextConfig}
- * @see https://nextjs.org/docs/pages/api-reference/next-config-js
  */
 const nextConfig = {
   env: {
-    APP_URL,
+    APP_URL: process.env.APP_URL || 
+             (process.env.VERCEL && `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`) ||
+             `${process.env.PROTOCOL || "http"}://${process.env.HOST || "localhost"}:${process.env.PORT || 3000}`
   },
   eslint: {
     ignoreDuringBuilds: Boolean(process.env.VERCEL),
@@ -76,11 +65,7 @@ const nextConfig = {
         hostname: "**",
       },
     ],
-  },
-  webpack: (config, { dev, isServer }) => {
-    if (dev && isServer) checkEnv();
-    return config;
-  },
+  }
 };
 
 function checkEnv() {
