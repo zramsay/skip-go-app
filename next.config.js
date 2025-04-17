@@ -1,9 +1,6 @@
 /**
  * @type {import('next').NextConfig}
  */
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
 const nextConfig = {
   env: {
     APP_URL: process.env.APP_URL || 
@@ -86,4 +83,4 @@ function checkEnv() {
   checkEnv.once = true;
 }
 
-export default nextConfig;
+module.exports = nextConfig;
