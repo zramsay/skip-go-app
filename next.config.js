@@ -1,6 +1,7 @@
-i/// <reference path="./env.d.ts" />
+/// <reference path="./env.d.ts" />
 /// <reference path="./vercel.d.ts" />
 
+// Define constants outside the config object
 const APP_URL =
   process.env.APP_URL ||
   (process.env.VERCEL && `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`) ||
@@ -8,9 +9,8 @@ const APP_URL =
 
 /**
  * @type {import('next').NextConfig}
- * @see https://nextjs.org/docs/pages/api-reference/next-config-js
  */
-let nextConfig = {
+const config = {
   env: {
     APP_URL,
   },
@@ -40,30 +40,7 @@ let nextConfig = {
       destination: "/api/widget/skip/handler",
     },
   ],
-  transpilePackages:
-    process.env.NODE_ENV === "test"
-      ? [
-          "@vercel/analytics",
-          "@evmos/provider",
-          "@evmos/transactions",
-          "@evmos/eip712",
-          "@evmos/proto",
-          "@buf/cosmos_cosmos-sdk.bufbuild_es",
-          "@buf/evmos_evmos.bufbuild_es",
-          "@buf/cosmos_ibc.bufbuild_es",
-          "wagmi",
-          "@tanstack/query-sync-storage-persister",
-          "@tanstack/react-query",
-          "@tanstack/query-core",
-          "@tanstack/react-query-persist-client",
-          "@tanstack/query-persist-client-core",
-          "@wagmi/core",
-          "@wagmi/connectors",
-          "viem",
-          "abitype",
-          "uuid",
-        ]
-      : [],
+  transpilePackages: [],
   images: {
     dangerouslyAllowSVG: true,
     remotePatterns: [
@@ -72,23 +49,8 @@ let nextConfig = {
         hostname: "**",
       },
     ],
-  },
-  webpack: (config, { dev, isServer }) => {
-    if (dev && isServer) checkEnv();
-    return config;
-  },
+  }
 };
 
-module.exports = nextConfig;
-
-function checkEnv() {
-  if (checkEnv.once) return;
-
-  const log = require("next/dist/build/output/log");
-
-  if (!process.env.POLKACHU_USER || !process.env.POLKACHU_PASSWORD) {
-    log.warn("env POLKACHU_USER or POLKACHU_PASSWORD is not set, will use public nodes");
-  }
-
-  checkEnv.once = true;
-}
+// Export the config
+module.exports = config;
