@@ -1,9 +1,11 @@
 /// <reference path="./env.d.ts" />
 /// <reference path="./vercel.d.ts" />
 
-var webpack = require('webpack');
+import webpack from 'webpack';
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 
-var APP_URL =
+const APP_URL =
   process.env.APP_URL ||
   (process.env.VERCEL && `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`) ||
   `${process.env.PROTOCOL || "http"}://${process.env.HOST || "localhost"}:${process.env.PORT || 3000}`;
@@ -12,7 +14,7 @@ var APP_URL =
  * @type {import('next').NextConfig}
  * @see https://nextjs.org/docs/pages/api-reference/next-config-js
  */
-var nextConfig = {
+const nextConfig = {
   env: {
     APP_URL,
   },
@@ -20,30 +22,28 @@ var nextConfig = {
     ignoreDuringBuilds: Boolean(process.env.VERCEL),
   },
   productionBrowserSourceMaps: true,
-  rewrites: async function() {
-    return [
-      {
-        source: "/.well-known/walletconnect.txt",
-        destination: "/api/walletconnect/verify",
-      },
-      {
-        source: "/api/rest/(.*)",
-        destination: "/api/rest/handler",
-      },
-      {
-        source: "/api/rpc/(.*)",
-        destination: "/api/rpc/handler",
-      },
-      {
-        source: "/api/skip/(.*)",
-        destination: "/api/skip/handler",
-      },
-      {
-        source: "/api/widget/skip/(.*)",
-        destination: "/api/widget/skip/handler",
-      },
-    ];
-  },
+  rewrites: async () => [
+    {
+      source: "/.well-known/walletconnect.txt",
+      destination: "/api/walletconnect/verify",
+    },
+    {
+      source: "/api/rest/(.*)",
+      destination: "/api/rest/handler",
+    },
+    {
+      source: "/api/rpc/(.*)",
+      destination: "/api/rpc/handler",
+    },
+    {
+      source: "/api/skip/(.*)",
+      destination: "/api/skip/handler",
+    },
+    {
+      source: "/api/widget/skip/(.*)",
+      destination: "/api/widget/skip/handler",
+    },
+  ],
   transpilePackages:
     process.env.NODE_ENV === "test"
       ? [
@@ -77,10 +77,7 @@ var nextConfig = {
       },
     ],
   },
-  webpack: function(config, options) {
-    var dev = options.dev;
-    var isServer = options.isServer;
-    
+  webpack: (config, { dev, isServer }) => {
     if (dev && isServer) checkEnv();
     return config;
   },
@@ -89,7 +86,7 @@ var nextConfig = {
 function checkEnv() {
   if (checkEnv.once) return;
 
-  var log = require("next/dist/build/output/log");
+  const log = require("next/dist/build/output/log");
 
   if (!process.env.POLKACHU_USER || !process.env.POLKACHU_PASSWORD) {
     log.warn("env POLKACHU_USER or POLKACHU_PASSWORD is not set, will use public nodes");
@@ -98,4 +95,4 @@ function checkEnv() {
   checkEnv.once = true;
 }
 
-module.exports = nextConfig;
+export default nextConfig;
